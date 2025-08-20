@@ -1,60 +1,116 @@
-*nvim-plugin-template.nvim.txt*  For NVIM v0.8.0 Last change: 2025 February 12
+*colormanager.txt*      Plugin for managing colorschemes and background colors
 
 ==============================================================================
-Table of Contents                *nvim-plugin-template.nvim-table-of-contents*
+CONTENTS                                               *colormanager-contents*
 
-1. nvim-plugin-template       |nvim-plugin-template.nvim-nvim-plugin-template|
-  - Usage               |nvim-plugin-template.nvim-nvim-plugin-template-usage|
-  - Format             |nvim-plugin-template.nvim-nvim-plugin-template-format|
-  - Test                 |nvim-plugin-template.nvim-nvim-plugin-template-test|
-  - CI                     |nvim-plugin-template.nvim-nvim-plugin-template-ci|
-  - More                 |nvim-plugin-template.nvim-nvim-plugin-template-more|
-  - License MIT   |nvim-plugin-template.nvim-nvim-plugin-template-license-mit|
+1. Introduction                                    |colormanager-introduction|
+2. Usage                                                  |colormanager-usage|
+3. Configuration                                  |colormanager-configuration|
+4. Example configuration                         |colormanager-example-config|
+5. Commands                                            |colormanager-commands|
+6. Functions                                          |colormanager-functions|
 
 ==============================================================================
-1. nvim-plugin-template       *nvim-plugin-template.nvim-nvim-plugin-template*
+1. INTRODUCTION                                    *colormanager-introduction*
 
-Neovim plugin template; includes automatic documentation generation from
-README, integration tests with Busted, and linting with Stylua
+colormanager.nvim - a plugin to store the last used colorscheme and
+background color. Allows for easy switching between colorschemes and
+toggling the background.
 
+License: MIT
 
-USAGE                   *nvim-plugin-template.nvim-nvim-plugin-template-usage*
+==============================================================================
+2. USAGE                                                  *colormanager-usage*
 
-1. Click `use this template` button generate a repo on your github.
-2. Clone your plugin repo. Open terminal then cd plugin directory.
-3. Run `python3 rename.py your-plugin-name`. This will replace all `nvim-plugin-template` to your `plugin-name`.
-Then it will prompt you input `y` or `n` to remove example codes in `init.lua` and
-`test/plugin_spec.lua`. If you are familiar this repo just input `y`. If you are looking at this template for the first time I suggest you inspect the contents. After this step `rename.py` will also auto-remove.
+To use the plugin, call the following Lua functions:
 
-Now you have a clean plugin environment. Enjoy!
+    `require('colormanager').select()` - select a colorscheme
+    `require('colormanager').toggle()` - toggle the background color
 
+==============================================================================
+3. CONFIGURATION                                  *colormanager-configuration*
 
-FORMAT                 *nvim-plugin-template.nvim-nvim-plugin-template-format*
+Configure the plugin by calling the setup function:
 
-The CI uses `stylua` to format the code; customize the formatting by editing
-`.stylua.toml`.
+>
+    require('colormanager').setup({
+        colors = {
+            -- list of colorschemes
+        },
+        fallback = 'scheme_name' -- fallback scheme
+    })
+<
 
+==============================================================================
+4. EXAMPLE CONFIGURATION                         *colormanager-example-config*
 
-TEST                     *nvim-plugin-template.nvim-nvim-plugin-template-test*
+Example configuration for Lazy.nvim:
 
-See Running tests locally
-<https://github.com/nvim-neorocks/nvim-busted-action?tab=readme-ov-file#running-tests-locally>
+>
+    return {
+        'prepodobnuy/colormanager.nvim',
+        priority = 1000,
+        opts = {
+            colors = {
+                { name = 'Cyberdream', set = 'cyberdream' },
+                { name = 'Everforest', set = 'everforest' },
+                { name = 'Evergarden', set = 'evergarden' },
+                -- For schemes without automatic color changes:
+                { name = 'Github', dark = 'github_dark', light = 'github_light' },
+                { name = 'Gruber Darker', set = 'gruber-darker' },
+                { name = 'Gruvbox', set = 'gruvbox' },
+                { name = 'Kanagawa', set = 'kanagawa' },
+                { name = 'Mellow', set = 'mellow' },
+                { name = 'Tokyonight', set = 'tokyonight' },
+                { name = 'Vscode', set = 'vscode' },
+            },
+            fallback = 'Gruvbox',
+        },
+        dependencies = {
+            'scottmckendry/cyberdream.nvim',
+            'neanias/everforest-nvim',
+            'everviolet/nvim',
+            'projekt0n/github-nvim-theme',
+            'blazkowolf/gruber-darker.nvim',
+            'ellisonleao/gruvbox.nvim',
+            'rebelot/kanagawa.nvim',
+            'mellow-theme/mellow.nvim',
+            'folke/tokyonight.nvim',
+            'Mofiqul/vscode.nvim',
+        },
+    }
+<
 
+Each colorscheme entry can contain:
+    name   - display name
+    set    - colorscheme name (if no dark/light split)
+    dark   - colorscheme name for dark background
+    light  - colorscheme name for light background
 
-CI                         *nvim-plugin-template.nvim-nvim-plugin-template-ci*
+If `dark` and `light` are specified, they will be used based on the value
+of `vim.o.background`; otherwise, `set` is used.
 
-- Auto generates doc from README.
-- Runs the nvim-busted-action <https://github.com/nvim-neorocks/nvim-busted-action> for test.
-- Lints with `stylua`.
+==============================================================================
+5. COMMANDS                                            *colormanager-commands*
 
+The plugin does not provide direct Vim commands; use the Lua functions.
 
-MORE                     *nvim-plugin-template.nvim-nvim-plugin-template-more*
+==============================================================================
+6. FUNCTIONS                                          *colormanager-functions*
 
-To see this template in action, take a look at my other plugins.
+select()              *colormanager.select()*
+    Opens a menu to select a colorscheme. Displays a list of available
+    schemes and allows the user to choose one.
 
+toggle()              *colormanager.toggle()*
+    Toggles the background color between 'light' and 'dark'. Automatically
+    applies the appropriate colorscheme variant if the current scheme has
+    separate definitions for different backgrounds.
 
-LICENSE MIT       *nvim-plugin-template.nvim-nvim-plugin-template-license-mit*
+setup({opts})         *colormanager.setup()*
+    Configures the plugin. Accepts a table with parameters:
+        colors   - list of colorschemes
+        fallback - fallback scheme (used by default)
 
-Generated by panvimdoc <https://github.com/kdheepak/panvimdoc>
-
-vim:tw=78:ts=8:noet:ft=help:norl:
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:
