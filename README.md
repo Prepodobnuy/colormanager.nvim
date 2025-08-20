@@ -1,33 +1,58 @@
-# nvim-plugin-template
+# colormanager.nvim
 
-Neovim plugin template; includes automatic documentation generation from README, integration tests with Busted, and linting with Stylua
+Plugin to store last used color & background color
 
 ## Usage
 
-1. Click `use this template` button generate a repo on your github.
-2. Clone your plugin repo. Open terminal then cd plugin directory.
-3. Run `python3 rename.py your-plugin-name`. This will replace all `nvim-plugin-template` to your `plugin-name`. 
-   Then it will prompt you input `y` or `n` to remove example codes in `init.lua` and
-   `test/plugin_spec.lua`. If you are familiar this repo just input `y`. If you are looking at this template for the first time I suggest you inspect the contents. After this step `rename.py` will also auto-remove.
+```lua
+require('colormanager').select() -- select colorscheme
+require('colormanager').toggle() -- toggle background color
+```
 
-Now you have a clean plugin environment. Enjoy!
+## Configure
 
-## Format
+```lua
+require('colormanager').setup({})
+```
 
-The CI uses `stylua` to format the code; customize the formatting by editing `.stylua.toml`.
+## Example configuration
 
-## Test
-
-See [Running tests locally](https://github.com/nvim-neorocks/nvim-busted-action?tab=readme-ov-file#running-tests-locally)
-
-## CI
-
-- Auto generates doc from README.
-- Runs the [nvim-busted-action](https://github.com/nvim-neorocks/nvim-busted-action) for test.
-- Lints with `stylua`.
-
-## More
-
-To see this template in action, take a look at my other plugins.
+```lua
+-- with Lazy.nvim
+return {
+  'prepodobnuy/colormanager.nvim',
+  priority = 1000,
+  opts = {
+    colors = {
+      { name = 'Cyberdream', set = 'cyberdream' },
+      { name = 'Everforest', set = 'everforest' },
+      { name = 'Evergarden', set = 'evergarden' },
+      -- Applies color scheme based on vim.o.background: uses 'dark'/'light'
+      -- values if specified, otherwise falls back to 'set'. Essential for
+      -- color schemes without automatic background switching support.
+      { name = 'Github', dark = 'github_dark', light = 'github_light' },
+      { name = 'Gruber Darker', set = 'gruber-darker' },
+      { name = 'Gruvbox', set = 'gruvbox' },
+      { name = 'Kanagawa', set = 'kanagawa' },
+      { name = 'Mellow', set = 'mellow' },
+      { name = 'Tokyonight', set = 'tokyonight' },
+      { name = 'Vscode', set = 'vscode' },
+    },
+    fallback = 'Gruvbox',
+  },
+  dependencies = {
+    'scottmckendry/cyberdream.nvim',
+    'neanias/everforest-nvim',
+    'everviolet/nvim',
+    'projekt0n/github-nvim-theme',
+    'blazkowolf/gruber-darker.nvim',
+    'ellisonleao/gruvbox.nvim',
+    'rebelot/kanagawa.nvim',
+    'mellow-theme/mellow.nvim',
+    'folke/tokyonight.nvim',
+    'Mofiqul/vscode.nvim',
+  },
+}
+```
 
 ## License MIT

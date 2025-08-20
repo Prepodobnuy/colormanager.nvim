@@ -1,0 +1,28 @@
+---@class ColormodeOpts
+---@field colors ColormodeColor[]?
+---@field fallback string?
+---
+---@class ColormodeColor
+---@field name string
+---@field set string?
+---@field dark string?
+---@field light string?
+---
+---@class ColormodeColorParams
+---@field set string?
+---@field dark string?
+---@field light string?
+---
+---@alias ColormodeInnerColor
+---| table<string, ColormodeColorParams>
+---
+---@class ColorMode
+---@field colors ColormodeInnerColor
+---@field colornames string[]
+---@field fallback string?
+---@field lastcolor_path string
+---@field lastmode_path string
+---@field lastcolor string?
+---@field lastmode "dark" | "light"
+---@field select fun()
+---@field toggle fun()
