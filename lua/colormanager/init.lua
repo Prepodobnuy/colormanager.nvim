@@ -81,8 +81,8 @@ local function save_last_mode()
   if path then write_file(path, vim.o.background) end
 end
 
----@param color string?
-local function apply_color(color)
+local function apply_color()
+  color = colormanager.lastcolor
   local choosen = colormanager.colors[color]
   local dark = vim.o.background == 'dark'
 
@@ -97,7 +97,6 @@ local function apply_color(color)
   end
 
   save_last_color(color)
-  colormanager.lastcolor = color
   save_last_mode()
 end
 
@@ -106,7 +105,8 @@ local function select_color()
 
   vim.ui.select(items, {}, function(item)
     if item == nil then return end
-    apply_color(item)
+    colormanager.lastcolor = item
+    apply_color()
   end)
 end
 
@@ -151,7 +151,7 @@ function colormanager.setup(opts)
 
   vim.api.nvim_create_autocmd('OptionSet', {
     pattern = 'background',
-    callback = function() apply_color(colormanager.lastcolor) end,
+    callback = function() apply_color() end,
   })
 
   colormanager.select = select_color
