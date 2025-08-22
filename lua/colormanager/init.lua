@@ -1,8 +1,6 @@
 local colormanager = {}
 local initialized = false
 
-local function example() return true end
-
 local function read_file(path)
   local file_exists = vim.fn.filereadable(path) == 1
   if not file_exists then return end
@@ -56,7 +54,6 @@ end
 
 ---@return string?
 local function load_last_color()
-  local colors = colormanager.colors or {}
   local fallback = colormanager.fallback
   local path = colormanager.lastcolor_path
   if not path then return fallback end
@@ -100,6 +97,7 @@ local function apply_color(color)
   end
 
   save_last_color(color)
+  colormanager.lastcolor = color
   save_last_mode()
 end
 
