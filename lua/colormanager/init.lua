@@ -82,7 +82,7 @@ local function save_last_mode()
 end
 
 local function apply_color()
-  color = colormanager.lastcolor
+  local color = colormanager.lastcolor
   local choosen = colormanager.colors[color]
   local dark = vim.o.background == 'dark'
 
@@ -96,7 +96,7 @@ local function apply_color()
     if command then vim.cmd.colorscheme(command) end
   end
 
-  save_last_color(color)
+  if color then save_last_color(color) end
   save_last_mode()
 end
 
@@ -147,12 +147,15 @@ function colormanager.setup(opts)
     colormanager.lastmode = vim.o.background
   end
 
-  apply_color(colormanager.lastcolor)
+  apply_color()
 
   vim.api.nvim_create_autocmd('OptionSet', {
     pattern = 'background',
     callback = function() apply_color() end,
   })
+
+  vim.api.nvim_create_user_command('ColorManagerSelect', select_color, { desc = '[ColorManager] Select Colorscheme' })
+  vim.api.nvim_create_user_command('ColorManagerToggle', toggle_mode, { desc = '[ColorManager] Toggle Theme' })
 
   colormanager.select = select_color
   colormanager.toggle = toggle_mode
